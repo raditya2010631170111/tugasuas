@@ -8,14 +8,14 @@ import 'package:uts/4_onlineshop_detail.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
-  final String? username = prefs.getString('usernameUser');
+  final String? merek = prefs.getString('merekHandphone');
 
-  runApp(MyApp(username: username));
+  runApp(MyApp(merek: merek));
 }
 
 class MyApp extends StatelessWidget {
-  final String? username;
-  const MyApp({super.key, required this.username});
+  final String? merek;
+  const MyApp({super.key, required this.merek});
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.green,
+          primarySwatch: Colors.blue,
         ),
         home: username == null ? const SplashScreen() : const OnlineshopList(),
       ),
@@ -80,22 +80,26 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController _username = TextEditingController();
-  TextEditingController _password = TextEditingController();
+  TextEditingController _merek = TextEditingController();
+  TextEditingController _spesifikasi = TextEditingController();
+  TextEditingController _harga = TextEditingController();
 
   bool passenable = true;
 
   saveData() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString('usernameUser', _username.text.toString());
-    prefs.setString('passwordUser', _password.text.toString());
+    prefs.setString('merekHandphone', _merek.text.toString());
+    prefs.setString('spesifikasiHandphone', _spesifikasi.text.toString());
+    prefs.setString('hargaHandphone', _harga.text.toString());
 
-    final String? usernameUser = prefs.getString('usernameUser');
+    final String? merekHandphone = prefs.getString('merekHandphone');
 
-    if (_username.text == "" && _password.text == "") {
-      print("Unable to Login!");
-    } else if (_username.text == "" || _password.text == "") {
-      print("Unable to Login!");
+    if (_merek.text == "" && _spesifikasi.text == "" && _harga.text == "") {
+      print("Gagal Isi Form!");
+    } else if (_merek.text == "" ||
+        _spesifikasi.text == "" ||
+        _harga.text == "") {
+      print("Gagal Isi Form!");
     } else {
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const OnlineshopList()));
@@ -127,14 +131,14 @@ class _LoginState extends State<Login> {
                     height: 20,
                   ),
                   const Text(
-                    "Login",
+                    "Isi Data",
                     style: TextStyle(fontSize: 20, color: Colors.black),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   TextFormField(
-                    controller: _username,
+                    controller: _merek,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         focusedBorder: OutlineInputBorder(
@@ -143,9 +147,27 @@ class _LoginState extends State<Login> {
                           Icons.account_circle_outlined,
                           size: 40,
                         ),
-                        hintText: "Enter your Username",
+                        hintText: "Masukkan Merek Handhpne",
                         hintStyle: TextStyle(color: Colors.black),
-                        labelText: "Username",
+                        labelText: "Merek",
+                        labelStyle: TextStyle(color: Colors.black)),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: _spesifikasi,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black)),
+                        prefixIcon: Icon(
+                          Icons.account_circle_outlined,
+                          size: 40,
+                        ),
+                        hintText: "Masukkan Spek Handhpne",
+                        hintStyle: TextStyle(color: Colors.black),
+                        labelText: "Spesifikasi",
                         labelStyle: TextStyle(color: Colors.black)),
                   ),
                   const SizedBox(
@@ -153,7 +175,7 @@ class _LoginState extends State<Login> {
                   ),
                   TextFormField(
                     obscureText: passenable,
-                    controller: _password,
+                    controller: _harga,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       focusedBorder: OutlineInputBorder(
@@ -162,9 +184,9 @@ class _LoginState extends State<Login> {
                         Icons.lock,
                         size: 40,
                       ),
-                      hintText: "Enter your Password",
+                      hintText: "Masukkan Harga Handphone",
                       hintStyle: TextStyle(color: Colors.black),
-                      labelText: "Password",
+                      labelText: "Harga",
                       labelStyle: TextStyle(color: Colors.black),
                       suffixIcon: IconButton(
                         color: Colors.green,
